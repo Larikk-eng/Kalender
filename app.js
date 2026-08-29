@@ -1,17 +1,23 @@
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
+
+// ========================================
+// FIREBASE IMPORTS
+// ========================================
+
+import { initializeApp } from
+    "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 
 import {
-    getAuth,
-    createUserWithEmailAndPassword,
-    signInWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
+    getFirestore,
+    collection,
+    addDoc
+} from
+    "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
+// ========================================
 // DEINE FIREBASE KONFIGURATION
+// ========================================
+
 const firebaseConfig = {
     apiKey: "AIzaSyAQ3n3z7utduuPqQa6Zk4gq9vsPycqUMr0",
     authDomain: "kalender-99f7d.firebaseapp.com",
@@ -22,114 +28,81 @@ const firebaseConfig = {
 };
 
 
-// Firebase starten
+// ========================================
+// FIREBASE STARTEN
+// ========================================
+
 const app = initializeApp(firebaseConfig);
 
 
-// Authentifizierung starten
-const auth = getAuth(app);
+// ========================================
+// FIRESTORE STARTEN
+// ========================================
+
+const db = getFirestore(app);
 
 
-// HTML-Elemente
-const emailInput = document.getElementById("email");
-const passwordInput = document.getElementById("password");
+// ========================================
+// STATUS AUF DER WEBSITE
+// ========================================
 
-const registerButton =
-    document.getElementById("registerButton");
-
-const loginButton =
-    document.getElementById("loginButton");
-
-const logoutButton =
-    document.getElementById("logoutButton");
-
-const loginSection =
-    document.getElementById("loginSection");
-
-const appSection =
-    document.getElementById("appSection");
-
-const authMessage =
-    document.getElementById("authMessage");
+const status = document.getElementById("status");
 
 
-// Registrierung
-registerButton.addEventListener("click", async () => {
+// ========================================
+// FIREBASE TESTEN
+// ========================================
 
-    const email = emailInput.value;
-    const password = passwordInput.value;
+async function firebaseTest() {
 
     try {
 
-        await createUserWithEmailAndPassword(
-            auth,
-            email,
-            password
+        console.log("Firebase wird getestet...");
+
+
+        // Test-Dokument in Firestore erstellen
+        const docRef = await addDoc(
+            collection(db, "test"),
+            {
+                nachricht: "Firebase funktioniert!",
+                zeit: new Date().toISOString()
+            }
         );
 
-        authMessage.textContent =
-            "Account erfolgreich erstellt!";
+
+        // Erfolg in der Browser-Konsole
+        console.log(
+            "Firebase funktioniert!",
+            "Dokument-ID:",
+            docRef.id
+        );
+
+
+        // Erfolg auf der Website anzeigen
+        if (status) {
+            status.textContent =
+                "✅ Firebase und Firestore funktionieren!";
+        }
+
 
     } catch (error) {
 
-        console.error(error);
-
-        authMessage.textContent =
-            "Fehler: " + error.message;
-    }
-});
-
-
-// Anmeldung
-loginButton.addEventListener("click", async () => {
-
-    const email = emailInput.value;
-    const password = passwordInput.value;
-
-    try {
-
-        await signInWithEmailAndPassword(
-            auth,
-            email,
-            password
+        console.error(
+            "Firebase Fehler:",
+            error
         );
 
-        authMessage.textContent =
-            "Erfolgreich angemeldet!";
 
-    } catch (error) {
-
-        console.error(error);
-
-        authMessage.textContent =
-            "Fehler: " + error.message;
-    }
-});
-
-
-// Abmelden
-logoutButton.addEventListener("click", async () => {
-
-    await signOut(auth);
-
-});
-
-
-// Überprüfen, ob jemand eingeloggt ist
-onAuthStateChanged(auth, (user) => {
-
-    if (user) {
-
-        console.log("Eingeloggt:", user.uid);
-
-        loginSection.hidden = true;
-        appSection.hidden = false;
-
-    } else {
-
-        loginSection.hidden = false;
-        appSection.hidden = true;
+        if (status) {
+            status.textContent =
+                "❌ Firebase-Fehler: " +
+                error.message;
+        }
 
     }
 
-});
+}
+
+
+// Test starten
+firebaseTest();
