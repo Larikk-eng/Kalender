@@ -1,11 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>Meine erste GitHub Page</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta name="theme-color" content="#111827">
+
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Mein Kalender</title>
 </head>
+
 <body>
-    <h1>Hallo, Welt!</h1>
-    <p>Meine erste Website auf GitHub Pages.</p>
+
+    <header>
+        <h1>Mein Kalender</h1>
+    </header>
+
+    <main>
+
+        <section id="loginSection">
+            <h2>Anmelden</h2>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="E-Mail"
+            >
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Passwort"
+            >
+
+            <button id="registerButton">
+                Registrieren
+            </button>
+
+            <button id="loginButton">
+                Anmelden
+            </button>
+
+            <p id="authMessage"></p>
+        </section>
+
+
+        <section id="appSection" hidden>
+
+            <h2>Willkommen!</h2>
+
+            <button id="logoutButton">
+                Abmelden
+            </button>
+
+            <hr>
+
+            <h2>Meine Termine</h2>
+
+            <p>
+                Hier kommen später deine privaten Termine hin.
+            </p>
+
+        </section>
+
+    </main>
+
+    <script type="module" src="app.js"></script>
+
 </body>
 </html>
